@@ -1,404 +1,88 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Support Portal — Sinarmas Group</title>
+<title>HR Collaboration Hub</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a1a2e;min-height:100vh}
-  a{color:inherit;text-decoration:none}
-  .hidden{display:none!important}
-
-  /* TOPBAR */
-  .topbar{background:#fff;border-bottom:1px solid #e8e8f0;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-  .topbar-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;color:#1a1a2e}
-  .topbar-brand span{color:#1D9E75}
-  .topbar-right{display:flex;align-items:center;gap:12px}
-  .avatar{width:34px;height:34px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0F6E56;cursor:pointer}
-  .user-name{font-size:13px;color:#555}
-
-  /* LAYOUT */
-  .container{max-width:860px;margin:0 auto;padding:2rem 1rem}
-
-  /* CARD */
-  .card{background:#fff;border-radius:12px;border:1px solid #e8e8f0;padding:1.5rem;margin-bottom:1rem}
-
-  /* BUTTONS */
-  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;border:1px solid #d0d0e0;background:#fff;color:#1a1a2e;font-size:14px;cursor:pointer;transition:all 0.15s;font-family:inherit}
-  .btn:hover{background:#f5f6fa}
-  .btn-primary{background:#1D9E75;border-color:#1D9E75;color:#fff}
-  .btn-primary:hover{background:#0F6E56}
-  .btn-google{background:#fff;border:1px solid #d0d0e0;color:#333;width:100%;justify-content:center;padding:12px;font-size:15px;border-radius:8px}
-  .btn-google:hover{background:#f8f8f8;border-color:#aaa}
-  .btn-sm{padding:5px 12px;font-size:13px}
-  .btn-danger{border-color:#e24b4a;color:#a32d2d}
-  .btn-danger:hover{background:#fcebeb}
-
-  /* BADGES */
-  .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
-  .badge-open{background:#E1F5EE;color:#0F6E56}
-  .badge-process{background:#FAEEDA;color:#854F0B}
-  .badge-done{background:#EAF3DE;color:#3B6D11}
-  .badge-closed{background:#f1f1f5;color:#666}
-  .badge-kritis{background:#FCEBEB;color:#a32d2d}
-  .badge-tinggi{background:#FAEEDA;color:#854F0B}
-  .badge-normal{background:#f1f1f5;color:#555}
-
-  /* FORMS */
-  .field{margin-bottom:1rem}
-  .field label{display:block;font-size:13px;font-weight:600;color:#555;margin-bottom:5px}
-  .field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid #d0d0e0;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;color:#1a1a2e;transition:border 0.15s}
-  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#1D9E75}
-  .field textarea{resize:vertical;min-height:100px;line-height:1.6}
-  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-  /* STAT CARDS */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
-  .stat{background:#fff;border-radius:10px;border:1px solid #e8e8f0;padding:14px 16px}
-  .stat-num{font-size:26px;font-weight:700;margin-bottom:2px}
-  .stat-label{font-size:12px;color:#888}
-
-  /* TICKET LIST */
-  .ticket-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #f0f0f8;cursor:pointer;transition:background 0.1s}
-  .ticket-item:last-child{border-bottom:none}
-  .ticket-item:hover{background:#f9f9fc;margin:0 -1.5rem;padding-left:1.5rem;padding-right:1.5rem;border-radius:8px}
-  .ticket-id{font-size:12px;color:#999;min-width:64px;font-weight:600}
-  .ticket-info{flex:1}
-  .ticket-title{font-size:14px;font-weight:600;margin-bottom:3px}
-  .ticket-meta{font-size:12px;color:#999}
-  .empty-state{text-align:center;padding:3rem 1rem;color:#aaa}
-  .empty-state .icon{font-size:48px;margin-bottom:12px}
-
-  /* LOGIN PAGE */
-  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0faf6 0%,#f5f6fa 100%)}
-  .login-card{background:#fff;border-radius:16px;border:1px solid #e8e8f0;padding:2.5rem;width:100%;max-width:420px}
-  .login-logo{text-align:center;margin-bottom:2rem}
-  .login-logo .icon-wrap{width:64px;height:64px;background:#E1F5EE;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px}
-  .login-logo h1{font-size:20px;font-weight:700;margin-bottom:4px}
-  .login-logo p{font-size:13px;color:#888}
-  .divider{display:flex;align-items:center;gap:10px;margin:1.5rem 0;color:#bbb;font-size:12px}
-  .divider::before,.divider::after{content:'';flex:1;height:1px;background:#eee}
-
-  /* DETAIL PAGE */
-  .detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:1rem;font-size:13px}
-  .detail-meta-item span:first-child{color:#888}
-  .detail-desc{background:#f9f9fc;border-radius:8px;padding:1rem;font-size:14px;line-height:1.7;color:#333;margin:1rem 0}
-  .timeline{border-left:2px solid #e1f5ee;padding-left:1.25rem;margin-top:0.5rem}
-  .tl-item{position:relative;padding-bottom:1rem;font-size:13px;color:#555;line-height:1.5}
-  .tl-item:last-child{padding-bottom:0}
-  .tl-item::before{content:'';position:absolute;left:-1.45rem;top:4px;width:10px;height:10px;border-radius:50%;background:#1D9E75;border:2px solid #fff}
-  .tl-item.current::before{background:#854F0B}
-  .tl-time{font-size:11px;color:#bbb;margin-top:2px}
-
-  /* STATUS INDICATOR */
-  .status-bar{background:#FAEEDA;border-radius:8px;padding:10px 14px;font-size:13px;color:#854F0B;display:flex;align-items:center;gap:8px;margin-bottom:1rem}
-  .pulse{width:8px;height:8px;border-radius:50%;background:#854F0B;animation:pulse 1.5s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-
-  /* TOAST */
-  .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1a1a2e;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;display:flex;align-items:center;gap:8px;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s}
-  .toast.show{transform:translateY(0);opacity:1}
-  .toast.success{background:#0F6E56}
-  .toast.error{background:#a32d2d}
-
-  /* PAGE HEADER */
-  .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
-  .page-header h2{font-size:18px;font-weight:700}
-  .back-btn{display:flex;align-items:center;gap:6px;font-size:13px;color:#888;cursor:pointer;margin-bottom:1rem}
-  .back-btn:hover{color:#1D9E75}
-
-  /* SECTION TITLE */
-  .section-title{font-size:13px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem}
-
-  /* FILTER BAR */
-  .filter-bar{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
-  .filter-btn{padding:5px 14px;border-radius:20px;border:1px solid #e0e0ea;background:#fff;font-size:13px;cursor:pointer;transition:all 0.15s}
-  .filter-btn.active{background:#1D9E75;border-color:#1D9E75;color:#fff}
-
-  @media(max-width:600px){
-    .stats{grid-template-columns:repeat(2,1fr)}
-    .field-row{grid-template-columns:1fr}
-    .container{padding:1rem}
-    .topbar{padding:0 1rem}
-  }
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#111827;min-height:100vh}a{text-decoration:none;color:inherit}.hidden{display:none!important}.topbar{height:60px;background:#fff;border-bottom:1px solid #e5e7eb;padding:0 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20}.brand{display:flex;align-items:center;gap:10px;font-weight:800;color:#0f172a}.brand .mark{width:34px;height:34px;border-radius:10px;background:#e1f5ee;display:flex;align-items:center;justify-content:center}.brand span{color:#1D9E75}.navright{display:flex;align-items:center;gap:12px}.avatar{width:36px;height:36px;border-radius:50%;background:#e1f5ee;color:#0f6e56;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:12px}.username{font-size:14px;color:#374151}.btn{border:1px solid #d1d5db;background:#fff;color:#111827;border-radius:9px;padding:9px 16px;font:inherit;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}.btn:hover{background:#f9fafb}.btn-primary{background:#1D9E75;color:#fff;border-color:#1D9E75}.btn-primary:hover{background:#0F6E56}.btn-warning{background:#fff7ed;color:#9a3412;border-color:#fed7aa}.btn-danger{color:#991b1b;border-color:#fecaca}.btn-sm{padding:6px 11px;font-size:12px}.container{max-width:1120px;margin:0 auto;padding:30px 18px}.hero{background:linear-gradient(135deg,#0f6e56 0%,#1D9E75 100%);border-radius:18px;color:#fff;padding:26px 28px;margin-bottom:22px;display:flex;justify-content:space-between;gap:20px;align-items:center}.hero h1{font-size:28px;margin-bottom:6px}.hero p{opacity:.88}.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px;margin-bottom:16px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px}.stat .num{font-size:30px;font-weight:800}.stat .label{font-size:13px;color:#6b7280}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{margin-bottom:14px}.field label{display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;background:#fff}.field textarea{min-height:112px;resize:vertical;line-height:1.6}.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#1D9E75;box-shadow:0 0 0 3px #e1f5ee}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tab{border:1px solid #d1d5db;background:#fff;border-radius:999px;padding:7px 14px;cursor:pointer;font-size:13px}.tab.active{background:#1D9E75;color:#fff;border-color:#1D9E75}.ticket{display:grid;grid-template-columns:110px 1fr 250px;gap:14px;align-items:center;padding:15px 0;border-bottom:1px solid #f0f2f5;cursor:pointer}.ticket:last-child{border-bottom:none}.ticket:hover{background:#fafafa;margin:0 -18px;padding-left:18px;padding-right:18px;border-radius:10px}.ticket-id{font-size:12px;font-weight:800;color:#6b7280}.ticket-title{font-weight:800;margin-bottom:4px}.meta{font-size:12px;color:#6b7280;line-height:1.5}.right{text-align:right}.badge{display:inline-flex;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;white-space:nowrap;margin:2px}.b-submitted{background:#eef2ff;color:#3730a3}.b-waiting{background:#fef3c7;color:#92400e}.b-clarification{background:#fee2e2;color:#991b1b}.b-progress{background:#dbeafe;color:#1d4ed8}.b-completed{background:#dcfce7;color:#166534}.b-closed{background:#f3f4f6;color:#374151}.b-overdue{background:#ffe4e6;color:#be123c}.p-critical{background:#fee2e2;color:#991b1b}.p-high{background:#ffedd5;color:#9a3412}.p-normal{background:#f3f4f6;color:#374151}.p-low{background:#ecfdf5;color:#047857}.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0faf6 0%,#f5f6fa 100%);padding:24px}.login-card{width:100%;max-width:460px;background:#fff;border:1px solid #e5e7eb;border-radius:22px;padding:34px}.login-logo{text-align:center;margin-bottom:24px}.login-logo .icon{width:70px;height:70px;border-radius:18px;background:#e1f5ee;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:32px}.login-logo h1{font-size:26px}.login-logo p{color:#6b7280;margin-top:5px}.divider{display:flex;align-items:center;gap:12px;color:#9ca3af;font-size:12px;margin:20px 0}.divider:before,.divider:after{content:'';height:1px;background:#e5e7eb;flex:1}.section-title{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:#6b7280;font-weight:900;margin-bottom:10px}.back{font-size:14px;color:#6b7280;margin-bottom:16px;cursor:pointer}.back:hover{color:#1D9E75}.timeline{border-left:2px solid #dcfce7;padding-left:18px}.tl{position:relative;margin-bottom:14px;font-size:13px;line-height:1.5;color:#374151}.tl:before{content:'';position:absolute;left:-24px;top:3px;width:10px;height:10px;background:#1D9E75;border-radius:50%;border:2px solid #fff}.toast{position:fixed;right:22px;bottom:22px;background:#111827;color:#fff;border-radius:12px;padding:12px 18px;font-size:13px;opacity:0;transform:translateY(50px);transition:.25s;z-index:99}.toast.show{opacity:1;transform:translateY(0)}.toast.error{background:#991b1b}.empty{text-align:center;color:#9ca3af;padding:46px 10px}.management-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.bar{display:flex;align-items:center;gap:10px;margin:9px 0}.bar .name{width:85px;font-size:12px;color:#4b5563}.bar .track{flex:1;background:#f3f4f6;height:10px;border-radius:999px;overflow:hidden}.bar .fill{background:#1D9E75;height:100%;border-radius:999px}.bar .count{width:30px;text-align:right;font-size:12px;font-weight:800}.hint{background:#f9fafb;border:1px dashed #d1d5db;border-radius:12px;padding:12px;color:#4b5563;font-size:13px;line-height:1.6}@media(max-width:800px){.grid4{grid-template-columns:repeat(2,1fr)}.row,.management-grid{grid-template-columns:1fr}.ticket{grid-template-columns:1fr}.right{text-align:left}.hero{display:block}.hero .btn{margin-top:16px}.topbar{padding:0 14px}.username{display:none}}
 </style>
 </head>
 <body>
-
-<!-- ===== LOGIN PAGE ===== -->
 <div id="page-login" class="login-wrap">
   <div class="login-card">
-    <div class="login-logo">
-      <div class="icon-wrap">🎧</div>
-      <h1>Support Portal</h1>
-      <p>Sinarmas Group — IT Helpdesk</p>
+    <div class="login-logo"><div class="icon">🤝</div><h1>HR Collaboration Hub</h1><p>Great collaboration needs better communication.</p></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="login('Requester','Budi Santoso','budi.santoso@sinarmas.co.id','BS')">Login as Requester</button>
+    <div class="divider">demo access</div>
+    <div style="display:grid;gap:9px">
+      <button class="btn" style="justify-content:center" onclick="login('PIC','Talent Management PIC','adminTM@gmail.com','TM')">Login as PIC - Talent Management</button>
+      <button class="btn" style="justify-content:center" onclick="login('PIC','Compensation Benefit PIC','adminCB@gmail.com','CB')">Login as PIC - C&B</button>
+      <button class="btn" style="justify-content:center" onclick="login('Admin','Corporate HR Admin','adminHR@gmail.com','HR')">Login as Admin HR</button>
+      <button class="btn" style="justify-content:center" onclick="login('Management','CHRO Dashboard','chro@sinarmas.co.id','CH')">Login as Management</button>
     </div>
-    <button class="btn btn-google" onclick="loginGoogle()">
-      <svg width="18" height="18" viewBox="0 0 48 48" style="vertical-align:-2px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-      Masuk dengan Google
-    </button>
-    <div class="divider">atau masuk sebagai demo</div>
-    <div style="display:grid;gap:8px">
-      <button class="btn" style="width:100%;justify-content:center" onclick="loginDemo('Budi Santoso','budi.santoso@sinarmas.co.id','BS')">👤 Budi Santoso (User)</button>
-      <button class="btn" style="width:100%;justify-content:center" onclick="loginDemo('Admin IT','admin.it@sinarmas.co.id','IT')">🛠️ Admin IT</button>
-    </div>
-    <p style="text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem">© 2025 Sinarmas Group Corporate HR</p>
+    <p style="text-align:center;color:#b0b7c3;font-size:11px;margin-top:20px">Prototype v1 · Google Sheets + Apps Script ready</p>
   </div>
 </div>
-
-<!-- ===== MAIN APP ===== -->
 <div id="app" class="hidden">
-
-  <nav class="topbar">
-    <div class="topbar-brand">🎧 Support<span>Portal</span></div>
-    <div class="topbar-right">
-      <div class="avatar" id="nav-avatar">?</div>
-      <span class="user-name" id="nav-name">User</span>
-      <button class="btn btn-sm" onclick="logout()">Keluar</button>
-    </div>
-  </nav>
-
-  <!-- DASHBOARD -->
-  <div id="page-dashboard" class="container hidden">
-    <div class="page-header">
-      <h2>Dashboard Tiket</h2>
-      <button class="btn btn-primary" onclick="showPage('create')">+ Buat Tiket</button>
-    </div>
-    <div class="stats" id="stat-grid"></div>
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="filterTickets('all',this)">Semua</button>
-      <button class="filter-btn" onclick="filterTickets('open',this)">Menunggu</button>
-      <button class="filter-btn" onclick="filterTickets('process',this)">Diproses</button>
-      <button class="filter-btn" onclick="filterTickets('done',this)">Selesai</button>
-    </div>
-    <div class="card" id="ticket-list"></div>
-  </div>
-
-  <!-- CREATE TICKET -->
-  <div id="page-create" class="container hidden">
-    <div class="back-btn" onclick="showPage('dashboard')">← Kembali ke Dashboard</div>
-    <div class="page-header"><h2>Buat Tiket Baru</h2></div>
-    <div class="card">
-      <div class="field">
-        <label>Judul masalah *</label>
-        <input type="text" id="t-title" placeholder="Contoh: Tidak bisa login SAP Fiori">
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Kategori *</label>
-          <select id="t-cat">
-            <option value="">-- Pilih --</option>
-            <option>Akses sistem / login</option>
-            <option>Hardware / perangkat</option>
-            <option>Email & komunikasi</option>
-            <option>SAP / HRIS</option>
-            <option>Jaringan / VPN</option>
-            <option>Software / aplikasi</option>
-            <option>Lainnya</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Prioritas</label>
-          <select id="t-prio">
-            <option value="Normal">Normal</option>
-            <option value="Tinggi">Tinggi</option>
-            <option value="Kritis">Kritis</option>
-          </select>
-        </div>
-      </div>
-      <div class="field">
-        <label>Deskripsi lengkap *</label>
-        <textarea id="t-desc" placeholder="Jelaskan masalah secara detail: kapan terjadi, pesan error yang muncul, langkah yang sudah dicoba..."></textarea>
-      </div>
-      <div class="field">
-        <label>Email penerima notifikasi</label>
-        <input type="email" id="t-email" placeholder="email@sinarmas.co.id">
-      </div>
-      <div style="display:flex;gap:10px;margin-top:0.5rem">
-        <button class="btn" onclick="showPage('dashboard')">Batal</button>
-        <button class="btn btn-primary" onclick="submitTicket()">📨 Kirim Tiket</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- DETAIL TICKET -->
-  <div id="page-detail" class="container hidden">
-    <div class="back-btn" onclick="showPage('dashboard')">← Kembali ke Dashboard</div>
-    <div class="card" id="detail-content"></div>
-    <div class="card">
-      <div class="section-title">Riwayat Status</div>
-      <div class="timeline" id="detail-timeline"></div>
-    </div>
-  </div>
-
+  <nav class="topbar"><div class="brand"><div class="mark">🤝</div>HR Collaboration <span>Hub</span></div><div class="navright"><div class="avatar" id="avatar">?</div><span class="username" id="username">User</span><button class="btn btn-sm" onclick="logout()">Logout</button></div></nav>
+  <main class="container">
+    <section id="page-dashboard"></section>
+    <section id="page-create" class="hidden"></section>
+    <section id="page-detail" class="hidden"></section>
+  </main>
 </div>
-
-<div class="toast" id="toast"></div>
-
+<div id="toast" class="toast"></div>
 <script>
-emailjs.init('PSeyAjpCTi50KnhaA');
-
-function sendEmail(ticket){
-  if(!ticket.email) return;
-  emailjs.send('service_2x0qc2s','template_vik6q5l',{
-    to_name: state.user.name,
-    to_email: ticket.email,
-    ticket_id: ticket.id,
-    title: ticket.title,
-    category: ticket.cat,
-    priority: ticket.prio
-  }).then(()=>console.log('Email terkirim: '+ticket.id))
-    .catch(e=>console.warn('Email gagal:',e));
-}
-
-const STATUS_LABEL = {open:'Menunggu',process:'Sedang Diproses',done:'Selesai',closed:'Ditutup'};
-const STATUS_BADGE = {open:'badge-open',process:'badge-process',done:'badge-done',closed:'badge-closed'};
-const PRIO_BADGE = {Normal:'badge-normal',Tinggi:'badge-tinggi',Kritis:'badge-kritis'};
-
-let state = {user:null,tickets:[],nextId:1,filter:'all'};
-
-function load(){
-  try{const s=localStorage.getItem('simas_v2');if(s)state=JSON.parse(s);}catch(e){}
-}
-function save(){
-  try{localStorage.setItem('simas_v2',JSON.stringify(state));}catch(e){}
-}
-function toast(msg,type='success'){
-  const el=document.getElementById('toast');
-  el.textContent=msg;
-  el.className='toast '+(type||'');
-  el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),3500);
-}
-function showPage(name){
-  ['page-dashboard','page-create','page-detail'].forEach(p=>{
-    document.getElementById(p).classList.add('hidden');
-  });
-  document.getElementById('page-'+name).classList.remove('hidden');
-  if(name==='dashboard') renderDashboard();
-}
-function loginGoogle(){
-  loginDemo('Budi Santoso','budi.santoso@sinarmas.co.id','BS');
-  // TODO: ganti dengan Google OAuth real saat production
-}
-function loginDemo(name,email,initials){
-  state.user={name,email,initials};
-  if(!state.tickets.length) seedTickets();
-  document.getElementById('nav-avatar').textContent=initials;
-  document.getElementById('nav-name').textContent=name;
-  document.getElementById('t-email').value=email;
-  document.getElementById('page-login').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  save();
-  showPage('dashboard');
-}
-function logout(){
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('page-login').classList.remove('hidden');
-}
-function seedTickets(){
-  const now = new Date();
-  const fmt = (d)=>new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  state.tickets=[
-    {id:'TKT-001',title:'Tidak bisa login SAP Fiori',cat:'SAP / HRIS',prio:'Tinggi',desc:'Muncul error "Session timeout" setiap kali login ke Fiori melalui browser Chrome. Sudah dicoba 3x tetap gagal.',email:state.user.email,status:'process',created:fmt(now-2*86400000),timeline:[{text:'Tiket dibuat — notifikasi dikirim ke email',time:fmt(now-2*86400000)},{text:'Diterima oleh tim IT. Sedang diinvestigasi.',time:fmt(now-1*86400000)}]},
-    {id:'TKT-002',title:'Printer lantai 5 tidak konek ke jaringan',cat:'Hardware / perangkat',prio:'Normal',desc:'Printer Canon MF745C di lantai 5 tidak bisa dideteksi dari semua PC. Sudah restart printer dan router.',email:state.user.email,status:'done',created:fmt(now-5*86400000),timeline:[{text:'Tiket dibuat',time:fmt(now-5*86400000)},{text:'Teknisi turun ke lapangan',time:fmt(now-4*86400000)},{text:'Masalah teratasi — driver di-reinstall. Printer sudah bisa digunakan.',time:fmt(now-3*86400000)}]},
-  ];
-  state.nextId=3;
-}
-function renderDashboard(){
-  const counts={};
-  state.tickets.forEach(t=>counts[t.status]=(counts[t.status]||0)+1);
-  document.getElementById('stat-grid').innerHTML=`
-    <div class="stat"><div class="stat-num">${state.tickets.length}</div><div class="stat-label">Total Tiket</div></div>
-    <div class="stat"><div class="stat-num" style="color:#1D9E75">${counts.open||0}</div><div class="stat-label">Menunggu</div></div>
-    <div class="stat"><div class="stat-num" style="color:#854F0B">${counts.process||0}</div><div class="stat-label">Sedang Diproses</div></div>
-    <div class="stat"><div class="stat-num" style="color:#3B6D11">${counts.done||0}</div><div class="stat-label">Selesai</div></div>
-  `;
-  const filtered = state.filter==='all' ? state.tickets : state.tickets.filter(t=>t.status===state.filter);
-  const tl = document.getElementById('ticket-list');
-  if(!filtered.length){
-    tl.innerHTML='<div class="empty-state"><div class="icon">📭</div><p>Belum ada tiket</p></div>';
-    return;
-  }
-  tl.innerHTML=filtered.slice().reverse().map(t=>`
-    <div class="ticket-item" onclick="showDetail('${t.id}')">
-      <span class="ticket-id">${t.id}</span>
-      <div class="ticket-info">
-        <div class="ticket-title">${t.title}</div>
-        <div class="ticket-meta">${t.cat} · ${t.created}</div>
-      </div>
-      <div style="text-align:right;display:flex;flex-direction:column;gap:4px;align-items:flex-end">
-        <span class="badge ${STATUS_BADGE[t.status]||'badge-open'}">${STATUS_LABEL[t.status]||'Menunggu'}</span>
-        <span class="badge ${PRIO_BADGE[t.prio]||'badge-normal'}" style="font-size:11px">${t.prio}</span>
-      </div>
-    </div>
-  `).join('');
-}
-function filterTickets(f,btn){
-  state.filter=f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderDashboard();
-}
-function submitTicket(){
-  const title=document.getElementById('t-title').value.trim();
-  const cat=document.getElementById('t-cat').value;
-  const prio=document.getElementById('t-prio').value;
-  const desc=document.getElementById('t-desc').value.trim();
-  const email=document.getElementById('t-email').value.trim();
-  if(!title||!cat||!desc){toast('Lengkapi judul, kategori, dan deskripsi!','error');return;}
-  const now=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  const id='TKT-'+String(state.nextId++).padStart(3,'0');
-  const newTicket = {id,title,cat,prio,desc,email,status:'open',created:now,timeline:[{text:'Tiket dibuat — notifikasi email dikirim ke '+(email||'-'),time:now}]};
-  state.tickets.push(newTicket);
-  document.getElementById('t-title').value='';
-  document.getElementById('t-cat').value='';
-  document.getElementById('t-desc').value='';
-  save();
-  sendEmail(newTicket);
-  toast('✅ Tiket '+id+' berhasil dibuat! Email konfirmasi terkirim.');
-  showPage('dashboard');
-}
-function showDetail(id){
-  const t=state.tickets.find(x=>x.id===id);
-  if(!t) return;
-  const isProcess=t.status==='process';
-  document.getElementById('detail-content').innerHTML=`
-    ${isProcess?`<div class="status-bar"><div class="pulse"></div> Tiket ini sedang aktif diproses oleh tim IT</div>`:''}
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem">
-      <div>
-        <div style="font-size:12px;color:#999;font-weight:600;margin-bottom:4px">${t.id}</div>
-        <h2 style="font-size:18px;font-weight:700">${t.title}</h2>
-      </div>
-      <span class="badge ${STATUS_BADGE[t.status]||'badge-open'}" style="white-space:nowrap">${STATUS_LABEL[t.status]||'Menunggu'}</span>
-    </div>
-    <div class="detail-desc">${t.desc}</div>
-    <div class="detail-meta">
-      <div class="detail-meta-item"><span>Kategori: </span><strong>${t.cat}</strong></div>
-      <div class="detail-meta-item"><span>Prioritas: </span><span class="badge ${PRIO_BADGE[t.prio]}">${t.prio}</span></div>
-      <div class="detail-meta-item"><span>Dibuat: </span>${t.created}</div>
-      <div class="detail-meta-item"><span>Email: </span>${t.email||'-'}</div>
-    </div>
-  `;
-  document.getElementById('detail-timeline').innerHTML=(t.timeline||[]).map((item,i,arr)=>`
-    <div class="tl-item ${i===arr.length-1&&t.status==='process'?'current':''}">
-      <div>${item.text}</div>
-      <div class="tl-time">${item.time}</div>
-    </div>
-  `).join('');
-  showPage('detail');
-}
-load();
-if(state.user){
-  document.getElementById('nav-avatar').textContent=state.user.initials;
-  document.getElementById('nav-name').textContent=state.user.name;
-  document.getElementById('t-email').value=state.user.email||'';
-  document.getElementById('page-login').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  showPage('dashboard');
-}
+// EmailJS kept to max 2 templates only. Later this can be replaced by Google Apps Script MailApp.
+try{ emailjs.init('PSeyAjpCTi50KnhaA'); }catch(e){}
+const ROUTING=[
+ {dept:'HR Shared Services',cat:'Employee Personal Data',desc:'Name, date of birth, contact info, address, national ID, emergency contacts.',subs:['Employee Data Update','Personal Profile','Emergency Contact','Master Data Correction'],pic:'adminHRSS@gmail.com',backup:'backupHRSS@gmail.com',owner:'Head of HR Shared Services',steward:'SM Team',custodian:'HRIS / PDA / SM'},
+ {dept:'Organization Effectiveness',cat:'Employment Data',desc:'Job title, position code, department, level, organization hierarchy.',subs:['Organization Structure','Position Data','Job Title','Department Mapping'],pic:'adminOE@gmail.com',backup:'backupOE@gmail.com',owner:'Head of Organization Effectiveness',steward:'OE Team',custodian:'HRIS / PDA / SM'},
+ {dept:'SPMO',cat:'Employee Performance Data',desc:'Performance review scores, KPI achievements, manager feedback.',subs:['KPI Data','Performance Score','Review Result','Calibration Support'],pic:'adminSPMO@gmail.com',backup:'backupSPMO@gmail.com',owner:'Head of SPMO',steward:'SPMO Team',custodian:'HRIS / PDA / SM'},
+ {dept:'Talent Management',cat:'Employee Talent Data',desc:'Succession plans, talent class, readiness.',subs:['Succession Plan','Talent Mapping','Internal Movement','Readiness Data'],pic:'adminTM@gmail.com',backup:'backupTM@gmail.com',owner:'Head of Talent Management',steward:'TM Team',custodian:'HRIS / PDA / SM'},
+ {dept:'Talent Acquisition',cat:'Recruitment Data',desc:'Candidate resumes, interview feedback.',subs:['Hiring Support','Candidate Data','Interview Feedback','Recruitment Report'],pic:'adminTA@gmail.com',backup:'backupTA@gmail.com',owner:'Head of Talent Acquisition',steward:'TA Team',custodian:'HRIS / PDA / SM'},
+ {dept:'Talent Acquisition',cat:'Onboarding Data',desc:'Onboarding checklist completion, induction attendance, probation status.',subs:['Onboarding Checklist','Induction Attendance','Probation Monitoring'],pic:'adminTA@gmail.com',backup:'backupTA@gmail.com',owner:'Head of Talent Acquisition',steward:'TA Team / HRSBP',custodian:'HRIS / PDA / SM'},
+ {dept:'Compensation & Benefit',cat:'Compensation & Benefit Data',desc:'Base salary, allowances, bonus/incentives, benefit enrollment.',subs:['Salary Review','Benefit Policy','Incentive Data','Benchmark Request'],pic:'adminCB@gmail.com',backup:'backupCB@gmail.com',owner:'Head of Compensation & Benefit',steward:'C&B Team',custodian:'HRIS / PDA / SM'},
+ {dept:'People Capability Development',cat:'Learning and Development Data',desc:'Course enrollments, completion status, training hours.',subs:['Training Request','Learning Report','Training Completion','Program Support'],pic:'adminPCD@gmail.com',backup:'backupPCD@gmail.com',owner:'Head of People Capability Development',steward:'PCD Team / HRSBP',custodian:'HRIS / PDA / SM'},
+ {dept:'People Capability Development',cat:'Employee Assessment Data',desc:'Leadership assessment, skill assessments.',subs:['Leadership Assessment','Skill Assessment','Assessment Result'],pic:'adminPCD@gmail.com',backup:'backupPCD@gmail.com',owner:'Head of People Capability Development',steward:'PCD Team / HRSBP',custodian:'HRIS / PDA / SM'},
+ {dept:'People Engagement & Culture',cat:'Culture & Wellbeing Data',desc:'Values/EVP, Wellbeing, Culture Harmonization, Event & Participation Management, Index score.',subs:['Engagement Program','Culture Event','Wellbeing Program','Participation Data'],pic:'adminPEC@gmail.com',backup:'backupPEC@gmail.com',owner:'Head of People Engagement & Culture',steward:'PEC Team / HRSBP',custodian:'HRIS / PDA / SM'},
+ {dept:'HR Shared Services',cat:'Engagement Survey Data',desc:'People/Engagement survey results, participation rates, culture index scores.',subs:['Engagement Survey','Survey Result','Participation Rate','Culture Index'],pic:'adminER@gmail.com',backup:'backupER@gmail.com',owner:'Head of HR Shared Services',steward:'ER Team / HRSBP',custodian:'HRIS / PDA / SM'},
+ {dept:'HR Shared Services',cat:'Exit Data',desc:'Exit interviews, resignation date, reason for leaving.',subs:['Exit Interview','Resignation Data','Exit Reason Report'],pic:'adminHRSS@gmail.com',backup:'backupHRSS@gmail.com',owner:'Head of HR Shared Services',steward:'SM Team / HRSBP',custodian:'HRIS / PDA / SM'}
+];
+const TYPES=['Ask / Consultation','Data Request','Project Request','Approval / Review','Coordination Request','Issue / Problem','Event / Program Support'];
+const STATUS=['Submitted','Waiting PIC Confirmation','Need Clarification','In Progress','Completed','Closed','Overdue'];
+const SLA={Critical:2,High:5,Normal:10,Low:14};
+const SB={'Submitted':'b-submitted','Waiting PIC Confirmation':'b-waiting','Need Clarification':'b-clarification','In Progress':'b-progress','Completed':'b-completed','Closed':'b-closed','Overdue':'b-overdue'};
+const PB={Critical:'p-critical',High:'p-high',Normal:'p-normal',Low:'p-low'};
+let state={user:null,tickets:[],next:1,filter:'All'};
+function save(){localStorage.setItem('hrch_v1',JSON.stringify(state))}function load(){try{const x=localStorage.getItem('hrch_v1');if(x)state=JSON.parse(x)}catch(e){}}
+function now(){return new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}
+function todayPlus(d){let x=new Date();x.setDate(x.getDate()+d);return x.toISOString().slice(0,10)}
+function toast(m,type){const t=document.getElementById('toast');t.textContent=m;t.className='toast '+(type||'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+function login(role,name,email,initials){state.user={role,name,email,initials};if(!state.tickets.length)seed();document.getElementById('page-login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('avatar').textContent=initials;document.getElementById('username').textContent=name+' · '+role;save();show('dashboard')}
+function logout(){document.getElementById('app').classList.add('hidden');document.getElementById('page-login').classList.remove('hidden')}
+function seed(){state.tickets=[
+ {id:'HRC-2026-001',title:'Succession Plan Review for Mining Business Unit',type:'Project Request',dept:'Talent Management',cat:'Employee Talent Data',sub:'Succession Plan',desc:'Need review and validation of successor readiness before calibration meeting.',expected:'Validated succession plan summary and readiness notes.',priority:'High',target:todayPlus(7),requester:'Budi Santoso',requesterEmail:'budi.santoso@sinarmas.co.id',pic:'adminTM@gmail.com',backup:'backupTM@gmail.com',owner:'Head of Talent Management',status:'In Progress',created:now(),timeline:[{text:'Ticket submitted and assigned to Talent Management PIC.',time:now()},{text:'PIC accepted the request and started working.',time:now()}]},
+ {id:'HRC-2026-002',title:'Salary benchmark data for new position structure',type:'Data Request',dept:'Compensation & Benefit',cat:'Compensation & Benefit Data',sub:'Benchmark Request',desc:'Request salary benchmark reference for new position structure.',expected:'Benchmark data file and recommendation note.',priority:'Normal',target:todayPlus(14),requester:'Budi Santoso',requesterEmail:'budi.santoso@sinarmas.co.id',pic:'adminCB@gmail.com',backup:'backupCB@gmail.com',owner:'Head of Compensation & Benefit',status:'Waiting PIC Confirmation',created:now(),timeline:[{text:'Ticket submitted and waiting for PIC confirmation.',time:now()}]},
+ {id:'HRC-2026-003',title:'Leadership assessment report clarification',type:'Ask / Consultation',dept:'People Capability Development',cat:'Employee Assessment Data',sub:'Leadership Assessment',desc:'Need clarification on leadership assessment report interpretation.',expected:'Explanation and recommendation for next development action.',priority:'Low',target:todayPlus(18),requester:'Budi Santoso',requesterEmail:'budi.santoso@sinarmas.co.id',pic:'adminPCD@gmail.com',backup:'backupPCD@gmail.com',owner:'Head of People Capability Development',status:'Need Clarification',created:now(),timeline:[{text:'Ticket submitted.',time:now()},{text:'PIC requested additional participant list and context.',time:now()}]}
+];state.next=4}
+function show(p){['dashboard','create','detail'].forEach(x=>document.getElementById('page-'+x).classList.add('hidden'));document.getElementById('page-'+p).classList.remove('hidden');if(p==='dashboard')renderDashboard();if(p==='create')renderCreate()}
+function visibleTickets(){let u=state.user;if(!u)return[];if(u.role==='Requester')return state.tickets.filter(t=>t.requesterEmail===u.email);if(u.role==='PIC')return state.tickets.filter(t=>t.pic===u.email||t.backup===u.email);return state.tickets}
+function renderStats(list){let count=s=>list.filter(t=>t.status===s).length;return `<div class="grid4"><div class="stat"><div class="num">${list.length}</div><div class="label">Total Tickets</div></div><div class="stat"><div class="num">${count('Waiting PIC Confirmation')}</div><div class="label">Waiting PIC</div></div><div class="stat"><div class="num">${count('In Progress')}</div><div class="label">In Progress</div></div><div class="stat"><div class="num">${count('Need Clarification')}</div><div class="label">Need Clarification</div></div></div>`}
+function renderDashboard(){const page=document.getElementById('page-dashboard');const list=visibleTickets();if(state.user.role==='Management'){page.innerHTML=renderManagement(list);return}let filtered=state.filter==='All'?list:list.filter(t=>t.status===state.filter);page.innerHTML=`<div class="hero"><div><h1>${state.user.role==='PIC'?'Assigned to Me':state.user.role==='Admin'?'Admin Console':'My Tickets'}</h1><p>One gateway for Corporate HR collaboration, request tracking, and project visibility.</p></div><button class="btn" onclick="show('create')">+ New Ticket</button></div>${renderStats(list)}<div class="tabs">${['All','Waiting PIC Confirmation','Need Clarification','In Progress','Completed','Overdue'].map(x=>`<button class="tab ${state.filter===x?'active':''}" onclick="state.filter='${x}';renderDashboard()">${x}</button>`).join('')}</div><div class="card">${filtered.length?filtered.slice().reverse().map(ticketCard).join(''):'<div class="empty">No ticket found.</div>'}</div>`}
+function ticketCard(t){return `<div class="ticket" onclick="detail('${t.id}')"><div class="ticket-id">${t.id}</div><div><div class="ticket-title">${t.title}</div><div class="meta">${t.type} · ${t.dept} · ${t.cat}<br>PIC: ${t.pic} · Target: ${t.target||'-'}</div></div><div class="right"><span class="badge ${SB[t.status]}">${t.status}</span><span class="badge ${PB[t.priority]}">${t.priority}</span></div></div>`}
+function renderManagement(list){const depts=[...new Set(state.tickets.map(t=>t.dept))];const max=Math.max(...depts.map(d=>state.tickets.filter(t=>t.dept===d).length),1);return `<div class="hero"><div><h1>Management Dashboard</h1><p>Aggregate view for Corporate HR collaboration visibility and accountability.</p></div></div>${renderStats(state.tickets)}<div class="management-grid"><div class="card"><div class="section-title">Tickets by Function</div>${depts.map(d=>{let c=state.tickets.filter(t=>t.dept===d).length;return `<div class="bar"><div class="name">${d.split(' ').map(w=>w[0]).join('').slice(0,5)}</div><div class="track"><div class="fill" style="width:${c/max*100}%"></div></div><div class="count">${c}</div></div>`}).join('')}</div><div class="card"><div class="section-title">Risk View</div><p class="meta" style="font-size:14px;margin-bottom:12px">Focus on overdue, waiting confirmation, and clarification loops.</p><div class="hint"><b>CHRO question:</b><br>Which request is stuck, who owns it, and how long has it been there?</div><br>${['Waiting PIC Confirmation','Need Clarification','In Progress','Overdue'].map(s=>`<div style="display:flex;justify-content:space-between;margin:10px 0"><span>${s}</span><b>${state.tickets.filter(t=>t.status===s).length}</b></div>`).join('')}</div></div><div class="card"><div class="section-title">All Tickets</div>${state.tickets.map(ticketCard).join('')}</div>`}
+function renderCreate(){let cats=ROUTING.map((r,i)=>`<option value="${i}">${r.dept} - ${r.cat}</option>`).join('');document.getElementById('page-create').innerHTML=`<div class="back" onclick="show('dashboard')">← Back to Dashboard</div><div class="hero"><div><h1>New Ticket</h1><p>Submit a collaboration request. The system will auto-route it to the right PIC based on HR governance.</p></div></div><div class="card"><div class="row"><div class="field"><label>Ticket Title *</label><input id="f-title" placeholder="Example: Succession Plan Review for XYZ Group"></div><div class="field"><label>Ticket Type *</label><select id="f-type">${TYPES.map(x=>`<option>${x}</option>`).join('')}</select></div></div><div class="row"><div class="field"><label>Category / Data Domain *</label><select id="f-route" onchange="updateRoute()"><option value="">-- Select category --</option>${cats}</select></div><div class="field"><label>Sub-category *</label><select id="f-sub"><option value="">-- Select category first --</option></select></div></div><div id="route-preview" class="hint" style="margin-bottom:14px">PIC will be automatically assigned after selecting category.</div><div class="row"><div class="field"><label>Priority *</label><select id="f-priority" onchange="updateSlaHint()"><option>Normal</option><option>High</option><option>Critical</option><option>Low</option></select></div><div class="field"><label>Target Date</label><input type="date" id="f-target"></div></div><div id="sla-hint" class="hint" style="margin-bottom:14px">Normal priority reminder: 10 days.</div><div class="field"><label>Description *</label><textarea id="f-desc" placeholder="Explain the background, context, and current issue..."></textarea></div><div class="field"><label>Expected Output *</label><textarea id="f-output" placeholder="What result do you need? Example: validated report, recommendation, approval, data file, or consultation notes."></textarea></div><div class="field"><label>Requester Notification Email</label><input id="f-email" type="email" value="${state.user.email||''}"></div><div style="display:flex;gap:10px"><button class="btn" onclick="show('dashboard')">Cancel</button><button class="btn btn-primary" onclick="submitTicket()">Submit Ticket</button></div></div>`}
+function updateRoute(){let idx=document.getElementById('f-route').value;let sub=document.getElementById('f-sub');let prev=document.getElementById('route-preview');if(idx===''){sub.innerHTML='<option value="">-- Select category first --</option>';prev.textContent='PIC will be automatically assigned after selecting category.';return}let r=ROUTING[idx];sub.innerHTML=r.subs.map(x=>`<option>${x}</option>`).join('');prev.innerHTML=`<b>Auto Assigned PIC:</b> ${r.pic}<br><b>Backup PIC:</b> ${r.backup}<br><b>Data Owner:</b> ${r.owner}<br><b>Data Steward:</b> ${r.steward}<br><b>Custodian:</b> ${r.custodian}`}
+function updateSlaHint(){let p=document.getElementById('f-priority').value;document.getElementById('sla-hint').textContent=`${p} priority reminder: ${SLA[p]} days.`}
+function submitTicket(){let idx=document.getElementById('f-route').value;let title=document.getElementById('f-title').value.trim(),desc=document.getElementById('f-desc').value.trim(),out=document.getElementById('f-output').value.trim();if(!title||idx===''||!desc||!out){toast('Please complete title, category, description, and expected output.','error');return}let r=ROUTING[idx],p=document.getElementById('f-priority').value;let id='HRC-2026-'+String(state.next++).padStart(3,'0');let t={id,title,type:document.getElementById('f-type').value,dept:r.dept,cat:r.cat,sub:document.getElementById('f-sub').value,desc,expected:out,priority:p,target:document.getElementById('f-target').value||todayPlus(SLA[p]),requester:state.user.name,requesterEmail:document.getElementById('f-email').value.trim(),pic:r.pic,backup:r.backup,owner:r.owner,status:'Waiting PIC Confirmation',created:now(),timeline:[{text:'Ticket submitted. Email notification prepared for PIC and requester.',time:now()}]};state.tickets.push(t);save();sendNewTicket(t);toast('Ticket '+id+' submitted and routed to '+r.pic);show('dashboard')}
+function detail(id){let t=state.tickets.find(x=>x.id===id);if(!t)return;document.getElementById('page-detail').innerHTML=`<div class="back" onclick="show('dashboard')">← Back to Dashboard</div><div class="card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div><div class="ticket-id">${t.id}</div><h2 style="margin:6px 0 8px">${t.title}</h2><div class="meta">${t.type} · ${t.dept} · ${t.cat} · ${t.sub}</div></div><div class="right"><span class="badge ${SB[t.status]}">${t.status}</span><span class="badge ${PB[t.priority]}">${t.priority}</span></div></div><div class="hint" style="margin:16px 0"><b>Description</b><br>${t.desc}<br><br><b>Expected Output</b><br>${t.expected}</div><div class="row"><div class="meta"><b>Requester:</b> ${t.requester}<br><b>Requester Email:</b> ${t.requesterEmail}<br><b>Target Date:</b> ${t.target}<br><b>Created:</b> ${t.created}</div><div class="meta"><b>PIC:</b> ${t.pic}<br><b>Backup:</b> ${t.backup}<br><b>Data Owner:</b> ${t.owner}</div></div></div><div class="card"><div class="section-title">Actions</div>${actionButtons(t)}</div><div class="card"><div class="section-title">Status History</div><div class="timeline">${t.timeline.map(x=>`<div class="tl"><div>${x.text}</div><div class="meta">${x.time}</div></div>`).join('')}</div></div>`;show('detail')}
+function actionButtons(t){let canPIC=state.user.role==='PIC'||state.user.role==='Admin';let canRequester=state.user.role==='Requester'||state.user.role==='Admin';let b=[];if(canPIC&&t.status==='Waiting PIC Confirmation')b.push(`<button class="btn btn-primary" onclick="changeStatus('${t.id}','In Progress')">Accept & Start</button>`);if(canPIC&&['In Progress','Need Clarification'].includes(t.status))b.push(`<button class="btn btn-warning" onclick="changeStatus('${t.id}','Need Clarification')">Need Clarification</button><button class="btn btn-primary" onclick="changeStatus('${t.id}','Completed')">Mark Completed</button>`);if(canRequester&&t.status==='Completed')b.push(`<button class="btn btn-primary" onclick="changeStatus('${t.id}','Closed')">Close Ticket</button>`);if(!b.length)b.push('<div class="hint">No action available for your role or current ticket status.</div>');return `<div style="display:flex;gap:10px;flex-wrap:wrap">${b.join('')}</div>`}
+function changeStatus(id,status){let t=state.tickets.find(x=>x.id===id);let note='';if(status==='Need Clarification')note=prompt('Clarification note for requester:')||'PIC needs more information.';if(status==='Completed')note=prompt('Completion note:')||'Work completed by PIC.';if(status==='In Progress')note='PIC accepted and started the ticket.';if(status==='Closed')note='Requester closed the ticket.';t.status=status;t.timeline.push({text:status+' - '+note,time:now()});save();sendStatusUpdate(t,note);toast('Status updated to '+status);detail(id)}
+function sendNewTicket(t){console.log('EmailJS Template 1: New Ticket Assigned',t);/* emailjs.send('service_2x0qc2s','template_new_ticket',{to_email:t.pic,requester_email:t.requesterEmail,ticket_id:t.id,title:t.title,type:t.type,category:t.cat,priority:t.priority,pic:t.pic,portal_url:location.href}) */}
+function sendStatusUpdate(t,note){console.log('EmailJS Template 2: Status Update',t,note);/* emailjs.send('service_2x0qc2s','template_status_update',{to_email:t.requesterEmail,pic_email:t.pic,ticket_id:t.id,title:t.title,new_status:t.status,note:note,portal_url:location.href}) */}
+load();if(state.user){document.getElementById('page-login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('avatar').textContent=state.user.initials;document.getElementById('username').textContent=state.user.name+' · '+state.user.role;show('dashboard')}
 </script>
 </body>
 </html>
