@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support Portal — Sinarmas Group</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a1a2e;min-height:100vh}
+  a{color:inherit;text-decoration:none}
+  .hidden{display:none!important}
+
+  /* TOPBAR */
+  .topbar{background:#fff;border-bottom:1px solid #e8e8f0;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .topbar-brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;color:#1a1a2e}
+  .topbar-brand span{color:#1D9E75}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .avatar{width:34px;height:34px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0F6E56;cursor:pointer}
+  .user-name{font-size:13px;color:#555}
+
+  /* LAYOUT */
+  .container{max-width:860px;margin:0 auto;padding:2rem 1rem}
+
+  /* CARD */
+  .card{background:#fff;border-radius:12px;border:1px solid #e8e8f0;padding:1.5rem;margin-bottom:1rem}
+
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;border:1px solid #d0d0e0;background:#fff;color:#1a1a2e;font-size:14px;cursor:pointer;transition:all 0.15s;font-family:inherit}
+  .btn:hover{background:#f5f6fa}
+  .btn-primary{background:#1D9E75;border-color:#1D9E75;color:#fff}
+  .btn-primary:hover{background:#0F6E56}
+  .btn-google{background:#fff;border:1px solid #d0d0e0;color:#333;width:100%;justify-content:center;padding:12px;font-size:15px;border-radius:8px}
+  .btn-google:hover{background:#f8f8f8;border-color:#aaa}
+  .btn-sm{padding:5px 12px;font-size:13px}
+  .btn-danger{border-color:#e24b4a;color:#a32d2d}
+  .btn-danger:hover{background:#fcebeb}
+
+  /* BADGES */
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+  .badge-open{background:#E1F5EE;color:#0F6E56}
+  .badge-process{background:#FAEEDA;color:#854F0B}
+  .badge-done{background:#EAF3DE;color:#3B6D11}
+  .badge-closed{background:#f1f1f5;color:#666}
+  .badge-kritis{background:#FCEBEB;color:#a32d2d}
+  .badge-tinggi{background:#FAEEDA;color:#854F0B}
+  .badge-normal{background:#f1f1f5;color:#555}
+
+  /* FORMS */
+  .field{margin-bottom:1rem}
+  .field label{display:block;font-size:13px;font-weight:600;color:#555;margin-bottom:5px}
+  .field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid #d0d0e0;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;color:#1a1a2e;transition:border 0.15s}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#1D9E75}
+  .field textarea{resize:vertical;min-height:100px;line-height:1.6}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  /* STAT CARDS */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+  .stat{background:#fff;border-radius:10px;border:1px solid #e8e8f0;padding:14px 16px}
+  .stat-num{font-size:26px;font-weight:700;margin-bottom:2px}
+  .stat-label{font-size:12px;color:#888}
+
+  /* TICKET LIST */
+  .ticket-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #f0f0f8;cursor:pointer;transition:background 0.1s}
+  .ticket-item:last-child{border-bottom:none}
+  .ticket-item:hover{background:#f9f9fc;margin:0 -1.5rem;padding-left:1.5rem;padding-right:1.5rem;border-radius:8px}
+  .ticket-id{font-size:12px;color:#999;min-width:64px;font-weight:600}
+  .ticket-info{flex:1}
+  .ticket-title{font-size:14px;font-weight:600;margin-bottom:3px}
+  .ticket-meta{font-size:12px;color:#999}
+  .empty-state{text-align:center;padding:3rem 1rem;color:#aaa}
+  .empty-state .icon{font-size:48px;margin-bottom:12px}
+
+  /* LOGIN PAGE */
+  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0faf6 0%,#f5f6fa 100%)}
+  .login-card{background:#fff;border-radius:16px;border:1px solid #e8e8f0;padding:2.5rem;width:100%;max-width:420px}
+  .login-logo{text-align:center;margin-bottom:2rem}
+  .login-logo .icon-wrap{width:64px;height:64px;background:#E1F5EE;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px}
+  .login-logo h1{font-size:20px;font-weight:700;margin-bottom:4px}
+  .login-logo p{font-size:13px;color:#888}
+  .divider{display:flex;align-items:center;gap:10px;margin:1.5rem 0;color:#bbb;font-size:12px}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:#eee}
+
+  /* DETAIL PAGE */
+  .detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:1rem;font-size:13px}
+  .detail-meta-item span:first-child{color:#888}
+  .detail-desc{background:#f9f9fc;border-radius:8px;padding:1rem;font-size:14px;line-height:1.7;color:#333;margin:1rem 0}
+  .timeline{border-left:2px solid #e1f5ee;padding-left:1.25rem;margin-top:0.5rem}
+  .tl-item{position:relative;padding-bottom:1rem;font-size:13px;color:#555;line-height:1.5}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item::before{content:'';position:absolute;left:-1.45rem;top:4px;width:10px;height:10px;border-radius:50%;background:#1D9E75;border:2px solid #fff}
+  .tl-item.current::before{background:#854F0B}
+  .tl-time{font-size:11px;color:#bbb;margin-top:2px}
+
+  /* STATUS INDICATOR */
+  .status-bar{background:#FAEEDA;border-radius:8px;padding:10px 14px;font-size:13px;color:#854F0B;display:flex;align-items:center;gap:8px;margin-bottom:1rem}
+  .pulse{width:8px;height:8px;border-radius:50%;background:#854F0B;animation:pulse 1.5s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1a1a2e;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;display:flex;align-items:center;gap:8px;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s}
+  .toast.show{transform:translateY(0);opacity:1}
+  .toast.success{background:#0F6E56}
+  .toast.error{background:#a32d2d}
+
+  /* PAGE HEADER */
+  .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+  .page-header h2{font-size:18px;font-weight:700}
+  .back-btn{display:flex;align-items:center;gap:6px;font-size:13px;color:#888;cursor:pointer;margin-bottom:1rem}
+  .back-btn:hover{color:#1D9E75}
+
+  /* SECTION TITLE */
+  .section-title{font-size:13px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem}
+
+  /* FILTER BAR */
+  .filter-bar{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+  .filter-btn{padding:5px 14px;border-radius:20px;border:1px solid #e0e0ea;background:#fff;font-size:13px;cursor:pointer;transition:all 0.15s}
+  .filter-btn.active{background:#1D9E75;border-color:#1D9E75;color:#fff}
+
+  @media(max-width:600px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .field-row{grid-template-columns:1fr}
+    .container{padding:1rem}
+    .topbar{padding:0 1rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="page-login" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="icon-wrap">🎧</div>
+      <h1>Support Portal</h1>
+      <p>Sinarmas Group — IT Helpdesk</p>
+    </div>
+    <button class="btn btn-google" onclick="loginGoogle()">
+      <svg width="18" height="18" viewBox="0 0 48 48" style="vertical-align:-2px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Masuk dengan Google
+    </button>
+    <div class="divider">atau masuk sebagai demo</div>
+    <div style="display:grid;gap:8px">
+      <button class="btn" style="width:100%;justify-content:center" onclick="loginDemo('Budi Santoso','budi.santoso@sinarmas.co.id','BS')">👤 Budi Santoso (User)</button>
+      <button class="btn" style="width:100%;justify-content:center" onclick="loginDemo('Admin IT','admin.it@sinarmas.co.id','IT')">🛠️ Admin IT</button>
+    </div>
+    <p style="text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem">© 2025 Sinarmas Group Corporate HR</p>
+  </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="app" class="hidden">
+
+  <nav class="topbar">
+    <div class="topbar-brand">🎧 Support<span>Portal</span></div>
+    <div class="topbar-right">
+      <div class="avatar" id="nav-avatar">?</div>
+      <span class="user-name" id="nav-name">User</span>
+      <button class="btn btn-sm" onclick="logout()">Keluar</button>
+    </div>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="container hidden">
+    <div class="page-header">
+      <h2>Dashboard Tiket</h2>
+      <button class="btn btn-primary" onclick="showPage('create')">+ Buat Tiket</button>
+    </div>
+    <div class="stats" id="stat-grid"></div>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterTickets('all',this)">Semua</button>
+      <button class="filter-btn" onclick="filterTickets('open',this)">Menunggu</button>
+      <button class="filter-btn" onclick="filterTickets('process',this)">Diproses</button>
+      <button class="filter-btn" onclick="filterTickets('done',this)">Selesai</button>
+    </div>
+    <div class="card" id="ticket-list"></div>
+  </div>
+
+  <!-- CREATE TICKET -->
+  <div id="page-create" class="container hidden">
+    <div class="back-btn" onclick="showPage('dashboard')">← Kembali ke Dashboard</div>
+    <div class="page-header"><h2>Buat Tiket Baru</h2></div>
+    <div class="card">
+      <div class="field">
+        <label>Judul masalah *</label>
+        <input type="text" id="t-title" placeholder="Contoh: Tidak bisa login SAP Fiori">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Kategori *</label>
+          <select id="t-cat">
+            <option value="">-- Pilih --</option>
+            <option>Akses sistem / login</option>
+            <option>Hardware / perangkat</option>
+            <option>Email & komunikasi</option>
+            <option>SAP / HRIS</option>
+            <option>Jaringan / VPN</option>
+            <option>Software / aplikasi</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Prioritas</label>
+          <select id="t-prio">
+            <option value="Normal">Normal</option>
+            <option value="Tinggi">Tinggi</option>
+            <option value="Kritis">Kritis</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Deskripsi lengkap *</label>
+        <textarea id="t-desc" placeholder="Jelaskan masalah secara detail: kapan terjadi, pesan error yang muncul, langkah yang sudah dicoba..."></textarea>
+      </div>
+      <div class="field">
+        <label>Email penerima notifikasi</label>
+        <input type="email" id="t-email" placeholder="email@sinarmas.co.id">
+      </div>
+      <div style="display:flex;gap:10px;margin-top:0.5rem">
+        <button class="btn" onclick="showPage('dashboard')">Batal</button>
+        <button class="btn btn-primary" onclick="submitTicket()">📨 Kirim Tiket</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL TICKET -->
+  <div id="page-detail" class="container hidden">
+    <div class="back-btn" onclick="showPage('dashboard')">← Kembali ke Dashboard</div>
+    <div class="card" id="detail-content"></div>
+    <div class="card">
+      <div class="section-title">Riwayat Status</div>
+      <div class="timeline" id="detail-timeline"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STATUS_LABEL = {open:'Menunggu',process:'Sedang Diproses',done:'Selesai',closed:'Ditutup'};
+const STATUS_BADGE = {open:'badge-open',process:'badge-process',done:'badge-done',closed:'badge-closed'};
+const PRIO_BADGE = {Normal:'badge-normal',Tinggi:'badge-tinggi',Kritis:'badge-kritis'};
+
+let state = {user:null,tickets:[],nextId:1,filter:'all'};
+
+function load(){
+  try{const s=localStorage.getItem('simas_v2');if(s)state=JSON.parse(s);}catch(e){}
+}
+function save(){
+  try{localStorage.setItem('simas_v2',JSON.stringify(state));}catch(e){}
+}
+function toast(msg,type='success'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.className='toast '+(type||'');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3500);
+}
+function showPage(name){
+  ['page-dashboard','page-create','page-detail'].forEach(p=>{
+    document.getElementById(p).classList.add('hidden');
+  });
+  document.getElementById('page-'+name).classList.remove('hidden');
+  if(name==='dashboard') renderDashboard();
+}
+function loginGoogle(){
+  loginDemo('Budi Santoso','budi.santoso@sinarmas.co.id','BS');
+  // TODO: ganti dengan Google OAuth real saat production
+}
+function loginDemo(name,email,initials){
+  state.user={name,email,initials};
+  if(!state.tickets.length) seedTickets();
+  document.getElementById('nav-avatar').textContent=initials;
+  document.getElementById('nav-name').textContent=name;
+  document.getElementById('t-email').value=email;
+  document.getElementById('page-login').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  save();
+  showPage('dashboard');
+}
+function logout(){
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('page-login').classList.remove('hidden');
+}
+function seedTickets(){
+  const now = new Date();
+  const fmt = (d)=>new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  state.tickets=[
+    {id:'TKT-001',title:'Tidak bisa login SAP Fiori',cat:'SAP / HRIS',prio:'Tinggi',desc:'Muncul error "Session timeout" setiap kali login ke Fiori melalui browser Chrome. Sudah dicoba 3x tetap gagal.',email:state.user.email,status:'process',created:fmt(now-2*86400000),timeline:[{text:'Tiket dibuat — notifikasi dikirim ke email',time:fmt(now-2*86400000)},{text:'Diterima oleh tim IT. Sedang diinvestigasi.',time:fmt(now-1*86400000)}]},
+    {id:'TKT-002',title:'Printer lantai 5 tidak konek ke jaringan',cat:'Hardware / perangkat',prio:'Normal',desc:'Printer Canon MF745C di lantai 5 tidak bisa dideteksi dari semua PC. Sudah restart printer dan router.',email:state.user.email,status:'done',created:fmt(now-5*86400000),timeline:[{text:'Tiket dibuat',time:fmt(now-5*86400000)},{text:'Teknisi turun ke lapangan',time:fmt(now-4*86400000)},{text:'Masalah teratasi — driver di-reinstall. Printer sudah bisa digunakan.',time:fmt(now-3*86400000)}]},
+  ];
+  state.nextId=3;
+}
+function renderDashboard(){
+  const counts={};
+  state.tickets.forEach(t=>counts[t.status]=(counts[t.status]||0)+1);
+  document.getElementById('stat-grid').innerHTML=`
+    <div class="stat"><div class="stat-num">${state.tickets.length}</div><div class="stat-label">Total Tiket</div></div>
+    <div class="stat"><div class="stat-num" style="color:#1D9E75">${counts.open||0}</div><div class="stat-label">Menunggu</div></div>
+    <div class="stat"><div class="stat-num" style="color:#854F0B">${counts.process||0}</div><div class="stat-label">Sedang Diproses</div></div>
+    <div class="stat"><div class="stat-num" style="color:#3B6D11">${counts.done||0}</div><div class="stat-label">Selesai</div></div>
+  `;
+  const filtered = state.filter==='all' ? state.tickets : state.tickets.filter(t=>t.status===state.filter);
+  const tl = document.getElementById('ticket-list');
+  if(!filtered.length){
+    tl.innerHTML='<div class="empty-state"><div class="icon">📭</div><p>Belum ada tiket</p></div>';
+    return;
+  }
+  tl.innerHTML=filtered.slice().reverse().map(t=>`
+    <div class="ticket-item" onclick="showDetail('${t.id}')">
+      <span class="ticket-id">${t.id}</span>
+      <div class="ticket-info">
+        <div class="ticket-title">${t.title}</div>
+        <div class="ticket-meta">${t.cat} · ${t.created}</div>
+      </div>
+      <div style="text-align:right;display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+        <span class="badge ${STATUS_BADGE[t.status]||'badge-open'}">${STATUS_LABEL[t.status]||'Menunggu'}</span>
+        <span class="badge ${PRIO_BADGE[t.prio]||'badge-normal'}" style="font-size:11px">${t.prio}</span>
+      </div>
+    </div>
+  `).join('');
+}
+function filterTickets(f,btn){
+  state.filter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDashboard();
+}
+function submitTicket(){
+  const title=document.getElementById('t-title').value.trim();
+  const cat=document.getElementById('t-cat').value;
+  const prio=document.getElementById('t-prio').value;
+  const desc=document.getElementById('t-desc').value.trim();
+  const email=document.getElementById('t-email').value.trim();
+  if(!title||!cat||!desc){toast('Lengkapi judul, kategori, dan deskripsi!','error');return;}
+  const now=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const id='TKT-'+String(state.nextId++).padStart(3,'0');
+  state.tickets.push({id,title,cat,prio,desc,email,status:'open',created:now,timeline:[{text:'Tiket dibuat — notifikasi email dikirim ke '+( email||'-'),time:now}]});
+  document.getElementById('t-title').value='';
+  document.getElementById('t-cat').value='';
+  document.getElementById('t-desc').value='';
+  save();
+  toast('✅ Tiket '+id+' berhasil dibuat! Email konfirmasi terkirim.');
+  showPage('dashboard');
+}
+function showDetail(id){
+  const t=state.tickets.find(x=>x.id===id);
+  if(!t) return;
+  const isProcess=t.status==='process';
+  document.getElementById('detail-content').innerHTML=`
+    ${isProcess?`<div class="status-bar"><div class="pulse"></div> Tiket ini sedang aktif diproses oleh tim IT</div>`:''}
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem">
+      <div>
+        <div style="font-size:12px;color:#999;font-weight:600;margin-bottom:4px">${t.id}</div>
+        <h2 style="font-size:18px;font-weight:700">${t.title}</h2>
+      </div>
+      <span class="badge ${STATUS_BADGE[t.status]||'badge-open'}" style="white-space:nowrap">${STATUS_LABEL[t.status]||'Menunggu'}</span>
+    </div>
+    <div class="detail-desc">${t.desc}</div>
+    <div class="detail-meta">
+      <div class="detail-meta-item"><span>Kategori: </span><strong>${t.cat}</strong></div>
+      <div class="detail-meta-item"><span>Prioritas: </span><span class="badge ${PRIO_BADGE[t.prio]}">${t.prio}</span></div>
+      <div class="detail-meta-item"><span>Dibuat: </span>${t.created}</div>
+      <div class="detail-meta-item"><span>Email: </span>${t.email||'-'}</div>
+    </div>
+  `;
+  document.getElementById('detail-timeline').innerHTML=(t.timeline||[]).map((item,i,arr)=>`
+    <div class="tl-item ${i===arr.length-1&&t.status==='process'?'current':''}">
+      <div>${item.text}</div>
+      <div class="tl-time">${item.time}</div>
+    </div>
+  `).join('');
+  showPage('detail');
+}
+load();
+if(state.user){
+  document.getElementById('nav-avatar').textContent=state.user.initials;
+  document.getElementById('nav-name').textContent=state.user.name;
+  document.getElementById('t-email').value=state.user.email||'';
+  document.getElementById('page-login').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  showPage('dashboard');
+}
+</script>
+</body>
+</html>
