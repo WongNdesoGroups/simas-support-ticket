@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Support Portal — Sinarmas Group</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f6fa;color:#1a1a2e;min-height:100vh}
@@ -237,6 +238,21 @@
 <div class="toast" id="toast"></div>
 
 <script>
+emailjs.init('PSeyAjpCTi50KnhaA');
+
+function sendEmail(ticket){
+  if(!ticket.email) return;
+  emailjs.send('service_2x0qc2s','template_vik6q5l',{
+    to_name: state.user.name,
+    to_email: ticket.email,
+    ticket_id: ticket.id,
+    title: ticket.title,
+    category: ticket.cat,
+    priority: ticket.prio
+  }).then(()=>console.log('Email terkirim: '+ticket.id))
+    .catch(e=>console.warn('Email gagal:',e));
+}
+
 const STATUS_LABEL = {open:'Menunggu',process:'Sedang Diproses',done:'Selesai',closed:'Ditutup'};
 const STATUS_BADGE = {open:'badge-open',process:'badge-process',done:'badge-done',closed:'badge-closed'};
 const PRIO_BADGE = {Normal:'badge-normal',Tinggi:'badge-tinggi',Kritis:'badge-kritis'};
@@ -335,11 +351,13 @@ function submitTicket(){
   if(!title||!cat||!desc){toast('Lengkapi judul, kategori, dan deskripsi!','error');return;}
   const now=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
   const id='TKT-'+String(state.nextId++).padStart(3,'0');
-  state.tickets.push({id,title,cat,prio,desc,email,status:'open',created:now,timeline:[{text:'Tiket dibuat — notifikasi email dikirim ke '+( email||'-'),time:now}]});
+  const newTicket = {id,title,cat,prio,desc,email,status:'open',created:now,timeline:[{text:'Tiket dibuat — notifikasi email dikirim ke '+(email||'-'),time:now}]};
+  state.tickets.push(newTicket);
   document.getElementById('t-title').value='';
   document.getElementById('t-cat').value='';
   document.getElementById('t-desc').value='';
   save();
+  sendEmail(newTicket);
   toast('✅ Tiket '+id+' berhasil dibuat! Email konfirmasi terkirim.');
   showPage('dashboard');
 }
